@@ -1,6 +1,6 @@
 const cp = require('child_process')
 
-// -- 可以覆盖的参数
+// -- 可以覆盖的参数11
 interface IOptions {
   cwd?: string
   env?: object
