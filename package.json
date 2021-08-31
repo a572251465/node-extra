@@ -1,6 +1,6 @@
 {
   "name": "node-extra",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "main": "dist/index.js",
   "license": "MIT",
   "files": [

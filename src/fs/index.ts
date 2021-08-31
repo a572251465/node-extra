@@ -39,13 +39,20 @@ const isDirExists = (dirPath: string): boolean => {
 /**
  * @author lihh
  * @description 指定文件写入内容
- * @param {*} dir
- * @param {*} content
+ * @param {*} dir 写入地址
+ * @param {*} content 写入内容
+ * @param {*} spaces 写入的时候 保持的空格
  */
-const wContent = (dir: string, content: string | object) => {
+const wContent = (
+  dir: string,
+  content: string | object,
+  spaces: number = 2
+) => {
   const stream = fs.createWriteStream(dir)
   stream.write(
-    typeof content === 'string' ? content : JSON.stringify(content, null, 2)
+    typeof content === 'string'
+      ? content
+      : JSON.stringify(content, null, spaces)
   )
   stream.close()
 }
