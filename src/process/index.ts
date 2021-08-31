@@ -40,4 +40,4 @@ const runCommand = (
     })
   })
 
-export { runCommand }
+export default runCommand
