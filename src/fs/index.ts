@@ -73,19 +73,21 @@ const rmFile = (dir: string): Promise<boolean> =>
           const status = isFileExists(name)
           if (status) {
             fs.unlinkSync(name)
-            return
-          }
-          const dirList = fs.readdirSync(name)
-          if (dirList.length === 0) {
-            fs.rmdirSync(name)
-            return
-          }
+          } else {
+            const dirList = fs.readdirSync(name)
+            if (dirList.length === 0) {
+              fs.rmdirSync(name)
+              return
+            }
 
-          const newDir = dirList.map((filename: string) =>
-            path.resolve(name, filename)
-          )
-          run(newDir)
-          fs.rmdirSync(name)
+            const newDir = dirList.map((filename: string) =>
+              path.resolve(name, filename)
+            )
+            run(newDir)
+            if (isDirExists(name)) {
+              fs.rmdirSync(name)
+            }
+          }
         }
       } catch (e) {
         console.log(e)
@@ -118,16 +120,17 @@ const cpFile = (fromPath: string, toPath: string): Promise<boolean> =>
         }
         let i = 0
         for (; i < dirList.length; i += 1) {
-          const newPath = path.resolve(targetPath, dirList[i])
+          const afterSuffix = suffix
+            ? path.join(suffix, dirList[i])
+            : dirList[i]
+          const newPath = path.resolve(fromPath, afterSuffix)
           const stat = fs.statSync(newPath)
-          const toNewPath = suffix
-            ? path.resolve(toPath, suffix, dirList[i])
-            : path.resolve(toPath, dirList[i])
+          const toNewPath = path.resolve(toPath, afterSuffix)
           if (stat.isDirectory()) {
             if (!isDirExists(toNewPath)) {
               fs.mkdirSync(toNewPath)
             }
-            run(newPath, dirList[i])
+            run(newPath, afterSuffix)
           }
           if (stat.isFile()) {
             fs.copyFileSync(newPath, toNewPath)
